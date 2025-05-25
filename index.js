@@ -4,6 +4,9 @@ const express = require("express")
 const connectDB = require("./config/db")
 const userRoutes = require("./routes/userRoutes")
 const adminUserRoutes = require("./routes/admin/adminUserRoute")
+const adminCategoryRoutes = require("./routes/admin/adminCategoryRoute")
+const adminProductRoutes = require("./routes/admin/productRoute")
+
 const app = express()
 // connection implementation
 connectDB()
@@ -13,6 +16,8 @@ app.use(express.json()) // accept json in request
 // implement routes here
 app.use("/api/auth", userRoutes)
 app.use("/api/admin/user", adminUserRoutes)
+app.use("/api/admin/category", adminCategoryRoutes)
+app.use("/api/admin/product", adminProductRoutes)
 
 // create a model student
 // stuid - unique, required
