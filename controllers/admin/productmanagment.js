@@ -23,17 +23,43 @@ exports.createProduct = async (req, res) => {
 }
 
 exports.getProducts = async (req, res) => {
-    try{
-        const products = await Product.find()
+    try {
+        const { page = 1, limit = 10, search = "" } = req.query
+
+        let filter = {}
+
+        if (search) {
+            filter.$or = [
+                { name: { $regex: search, $options: "i" } }
+            ]
+        }
+        
+        const skip = (page - 1) * limit; 
+
+        const products = await Product.find(filter)
             .populate("categoryId", "name") // 1. key, 2. project
             .populate("sellerId", "firstName email")
+            .skip(skip)
+            .limit(Number(limit))
+
+        const total = await Product.countDocuments(filter)
 
         return res.status(200).json({
-            success: true, message: "Data fetched", data: products
-        })    
-    }catch(err){
+            success: true, 
+            message: "Data fetched", 
+            data: products,
+            pagination: {
+                total,
+                page: Number(page),
+                limit: Number(limit),
+                totalPages: Math.ceil(total/limit) // ceil rounds number
+            } // pagination metadata
+        })
+    } catch (err) {
         return res.status(500).json({
             success: false, message: "Server error"
         })
     }
 }
+
+// using same logic, make pagination in category
