@@ -3,7 +3,8 @@ const Category = require('../../models/Category');
 // Create a new category
 exports.createCategory = async (req, res) => {
     try {
-        const category = new Category({ name: req.body.name });
+        const filepath = req.file?.path
+        const category = new Category({ name: req.body.name, filepath: filepath });
         await category.save();
         return res.status(201).json({
             success: true,

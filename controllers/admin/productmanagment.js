@@ -26,36 +26,41 @@ exports.getProducts = async (req, res) => {
     try {
         const { page = 1, limit = 10, search = "" } = req.query
 
-        let filter = {}
+        let filters = {}
 
         if (search) {
-            filter.$or = [
+            filters.$or = [
                 { name: { $regex: search, $options: "i" } }
             ]
         }
-        
-        const skip = (page - 1) * limit; 
 
-        const products = await Product.find(filter)
+        const skips = (page - 1) * limit;
+
+        const products = await Product.find(filters)
             .populate("categoryId", "name") // 1. key, 2. project
             .populate("sellerId", "firstName email")
-            .skip(skip)
+            .skip(skips)
             .limit(Number(limit))
 
-        const total = await Product.countDocuments(filter)
+        const total = await Product.countDocuments(filters)
 
         return res.status(200).json({
-            success: true, 
-            message: "Data fetched", 
+            success: true,
+            message: "Data fetched",
             data: products,
             pagination: {
                 total,
                 page: Number(page),
                 limit: Number(limit),
-                totalPages: Math.ceil(total/limit) // ceil rounds number
+                totalPages: Math.ceil(total / limit) // ceil rounds number
             } // pagination metadata
         })
     } catch (err) {
+        console.log('getProducts', {
+            message: err.message,
+            stack: err.stack,
+        });
+
         return res.status(500).json({
             success: false, message: "Server error"
         })

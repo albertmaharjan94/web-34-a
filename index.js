@@ -6,12 +6,13 @@ const userRoutes = require("./routes/userRoutes")
 const adminUserRoutes = require("./routes/admin/adminUserRoute")
 const adminCategoryRoutes = require("./routes/admin/adminCategoryRoute")
 const adminProductRoutes = require("./routes/admin/productRoute")
-
+const path = require("path")
 const app = express()
 // connection implementation
 connectDB()
 
 app.use(express.json()) // accept json in request
+app.use("/uploads", express.static(path.join(__dirname, "uploads")))
 
 // implement routes here
 app.use("/api/auth", userRoutes)
