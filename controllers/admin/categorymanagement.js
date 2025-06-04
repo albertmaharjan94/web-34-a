@@ -1,4 +1,7 @@
 const Category = require('../../models/Category');
+// Task 
+//  Create a avatar in user model
+// apply multer in avatar, upload and save user image
 
 // Create a new category
 exports.createCategory = async (req, res) => {

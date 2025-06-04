@@ -10,7 +10,7 @@ exports.registerUser = async (req, res) => {
         return res.status(403).json(
             {
                 "success": false,
-                "message": "Please fill all the fields"
+                "message": "Please fill all the fields" // change msg to message
             }
         )
     }

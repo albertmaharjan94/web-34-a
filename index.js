@@ -7,7 +7,14 @@ const adminUserRoutes = require("./routes/admin/adminUserRoute")
 const adminCategoryRoutes = require("./routes/admin/adminCategoryRoute")
 const adminProductRoutes = require("./routes/admin/productRoute")
 const path = require("path")
+
+const cors = require("cors")
 const app = express()
+let corsOptions = {
+    origin: "*" // can provide list of domain
+}
+app.use(cors(corsOptions))
+
 // connection implementation
 connectDB()
 
